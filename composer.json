@@ -1,0 +1,5 @@
+{
+    "require": {
+        "enqueue/amqp-lib": "^0.9.8"
+    }
+}

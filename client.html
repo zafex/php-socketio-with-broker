@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+	</head>
+	<body>
+	<div id="message-box" style="overflow-y: scroll; height: 100px; "></div>
+	<input type="text" id="message" onchange="send(this)">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+	<script>
+		const socket = io('http://localhost:19914');
+		var send = function (e) {
+			socket.emit('send message', {
+				message: e.value
+			});
+			e.value = '';
+		};
+		socket.on('new message', function(data){
+			document.getElementById('message-box').innerHTML += '<p>' + data.message +'</p>';
+		});
+	</script>
+	</body>
+</html>
