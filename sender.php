@@ -2,8 +2,6 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Enqueue\AmqpLib\AmqpConnectionFactory;
-
 $factory = new Enqueue\AmqpLib\AmqpConnectionFactory([
 	'host' => 'localhost',
 	'port' => 5672,
