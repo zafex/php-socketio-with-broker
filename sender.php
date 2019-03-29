@@ -2,34 +2,30 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$factory = new Enqueue\AmqpLib\AmqpConnectionFactory([
-	'host' => 'localhost',
-	'port' => 5672,
-	'user' => 'guest',
-	'pass' => 'guest',
-	'vhost' => '/'
-]);
+/**
+ * see server.js
+ */
+class TaskPassenger extends Viloveul\Transport\Passenger
+{
+    public function handle(): void
+    {
+        $params = array_slice($_SERVER['argv'], 1);
+        $this->setAttribute('message', implode(' ', $params));
+    }
 
-$params = array_slice($argv, 1);
+    public function point(): string
+    {
+        // queue name
+        return 'notification.queue';
+    }
 
-$context = $factory->createContext();
+    public function task(): string
+    {
+        // not used for socketio
+        return 'send.message';
+    }
+}
 
-$producer = $context->createProducer();
-$message = $context->createMessage(
-	json_encode([
-		'message' => implode(' ', $params)
-	])
-);
-$message->setContentType('application/json');
-
-$topic = $context->createTopic('amq.topic');
-$topic->setType(Interop\Amqp\AmqpTopic::TYPE_TOPIC);
-$topic->addFlag(Interop\Amqp\AmqpTopic::FLAG_DURABLE);
-
-$queue = $context->createQueue('send message');
-
-$context->declareTopic($topic);
-$context->declareQueue($queue);
-$context->bind(new Interop\Amqp\Impl\AmqpBind($topic, $queue));
-
-$producer->send($queue, $message);
+$bus = new Viloveul\Transport\Bus();
+$bus->setConnection('amqp://localhost:5672//');
+$bus->process(new TaskPassenger());

@@ -1,5 +1,11 @@
 {
+    "name": "zafex/socketio-with-rabbitmq",
+    "type": "project",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "enqueue/amqp-lib": "^0.9.8"
+        "php": ">5.5.9",
+        "ext-amqp": "*",
+        "viloveul/transport": "^1.0"
     }
 }
