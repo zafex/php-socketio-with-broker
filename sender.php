@@ -27,5 +27,6 @@ class TaskPassenger extends Viloveul\Transport\Passenger
 }
 
 $bus = new Viloveul\Transport\Bus();
-$bus->setConnection('amqp://localhost:5672//');
+$bus->addConnection('amqp://localhost:5672//');
 $bus->process(new TaskPassenger());
+$bus->error()->clear();
