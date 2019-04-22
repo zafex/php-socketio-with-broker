@@ -11,12 +11,14 @@
 		const socket = io('http://localhost:19914');
 		var send = function (e) {
 			socket.emit('send message', {
-				message: e.value
+				data: {
+					message: e.value
+				}
 			});
 			e.value = '';
 		};
-		socket.on('new message', function(data){
-			document.getElementById('message-box').innerHTML += '<p>' + data.message +'</p>';
+		socket.on('new message', function(res){
+			document.getElementById('message-box').innerHTML += '<p>' + res.data.message +'</p>';
 		});
 	</script>
 	</body>
